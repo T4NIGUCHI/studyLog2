@@ -11,48 +11,45 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     steps:
-      - name: Setup Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: "18"
-
-      - name: Install dependencies
-        run: npm install
-
-      - name: Run build
-        run: npm run build
-
-      - name: Verify dist directory
-        run: |
-          if [ ! -d "dist" ]; then
-            echo "::error::dist directory not found after build!"
-            exit 1
-          fi
-
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: "14"  # 使用するNode.jsのバージョンを指定
+
+      - name: Install dependencies
+        run: npm install  # npmパッケージのインストール
+
+      - name: Run build
+        run: npm run build  # Viteによるビルドを実行
+
+      - name: Verify dist directory
+        run: ls -la dist  # distディレクトリの内容を確認
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: dist  # アーティファクトの名前
+          path: dist  # 保存するディレクトリのパス
 
   deploy:
     name: Deploy to Firebase Hosting
     runs-on: ubuntu-latest
     needs: build  # buildジョブが完了した後に実行
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
       - name: Setup Node.js and cache
         uses: actions/setup-node@v2
         with:
-          node-version: "18"
-          cache: "npm"
-
-      - name: Verify dist directory before deploy
-        run: |
-          if [ ! -d "dist" ]; then
-            echo "::error::dist directory not found before deploy!"
-            exit 1
-          fi
+          node-version: "14"
+          cache: "npm"  # npmのキャッシュを使用して依存関係を高速化
 
       - name: Install firebase-tools
-        run: npm install --save-dev firebase-tools
+        run: npm install --save-dev firebase-tools  # Firebase CLIのインストール
 
       - name: Decode Firebase service account key
         run: |
@@ -60,29 +57,32 @@ jobs:
           echo "GOOGLE_APPLICATION_CREDENTIALS=${{ github.workspace }}/firebase-key.json" >> $GITHUB_ENV
 
       - name: Select Firebase project
-        run: ./node_modules/.bin/firebase use ${{ secrets.FIREBASE_PROJECT_ID }}
+        run: ./node_modules/.bin/firebase use ${{ secrets.FIREBASE_PROJECT_ID }}  # Firebaseプロジェクトの選択
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: dist  # アーティファクトの名前
+          path: dist  # 保存するパス
 
       - name: Deploy to Firebase Hosting
         run: |
           ./node_modules/.bin/firebase deploy --only hosting
         env:
-          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
-          FIREBASE_CLI_EXPERIMENTS: webframeworks
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}  # Firebaseトークンの設定
+          FIREBASE_CLI_EXPERIMENTS: webframeworks  # Firebase CLIの実験的機能の有効化
+
+      - name: Cleanup Firebase service account key
+        run: rm ./firebase-key.json  # ジョブ終了時にFirebaseのサービスアカウントキーを削除
 
       - name: Validate deployment
         run: echo "Deployment completed successfully!"
 
-      - name: Checkout code
-        uses: actions/checkout@v2
+# 例外処理のためのヘルパー関数
+      - name: Handle exceptions
+        if: ${{ failure() }}
+        run: echo "An error occurred during deployment."
 
-
-  cleanup:
-    name: Final cleanup
-    runs-on: ubuntu-latest
-    needs: deploy
-    steps:
-      - name: Cleanup Firebase service account key
-        run: rm ./firebase-key.json  # ジョブ終了時にFirebaseのサービスアカウントキーを削除
-
-      - name: Checkout code
-        uses: actions/checkout@v2
+# 終了後のクリーンアップ
+      - name: Final cleanup
+        run: echo "Post job cleanup complete."
