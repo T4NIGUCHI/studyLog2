@@ -17,7 +17,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: "14"  # 使用するNode.jsのバージョンを指定
+          node-version: "18"  # 使用するNode.jsのバージョンを指定
 
       - name: Install dependencies
         run: npm install  # npmパッケージのインストール
@@ -39,7 +39,7 @@ jobs:
       - name: Setup Node.js and cache
         uses: actions/setup-node@v2
         with:
-          node-version: "14"
+          node-version: "18"
           cache: "npm"  # npmのキャッシュを使用して依存関係を高速化
 
       - name: Install firebase-tools
