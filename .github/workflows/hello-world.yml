@@ -73,4 +73,5 @@ jobs:
 
 # 終了後のクリーンアップ
       - name: Final cleanup
+        needs: deploy
         run: echo "Post job cleanup complete."
