@@ -33,14 +33,9 @@ jobs:
     runs-on: ubuntu-latest
     needs: build  # buildジョブが完了した後に実行
     steps:
-          - name: Verify dist directory2
-        run: ls -la dist  # distディレクトリの内容を確認
 
       - name: Checkout code
         uses: actions/checkout@v2
-
-      - name: Verify dist directory3
-        run: ls -la dist  # distディレクトリの内容を確認
 
       - name: Setup Node.js and cache
         uses: actions/setup-node@v2
@@ -48,28 +43,23 @@ jobs:
           node-version: "18"
           cache: "npm"  # npmのキャッシュを使用して依存関係を高速化
 
-                - name: Verify dist directory4
-        run: ls -la dist  # distディレクトリの内容を確認
-
       - name: Install firebase-tools
         run: npm install --save-dev firebase-tools  # Firebase CLIのインストール
-
-              - name: Verify dist directory5
-        run: ls -la dist  # distディレクトリの内容を確認
 
       - name: Decode Firebase service account key
         run: |
           echo "${{ secrets.FIREBASE_KEY }}" | base64 -d > ./firebase-key.json
           echo "GOOGLE_APPLICATION_CREDENTIALS=${{ github.workspace }}/firebase-key.json" >> $GITHUB_ENV
 
-                - name: Verify dist directory6
-        run: ls -la dist  # distディレクトリの内容を確認
+      - name: Verify dist directory
+        run: |
+          if [ ! -d "dist" ]; then
+            echo "Error: 'dist' directory not found."
+            exit 1
+          fi
 
       - name: Select Firebase project
         run: ./node_modules/.bin/firebase use ${{ secrets.FIREBASE_PROJECT_ID }}  # Firebaseプロジェクトの選択
-
-              - name: Verify dist directory7
-        run: ls -la dist  # distディレクトリの内容を確認
 
       - name: Deploy to Firebase Hosting
         run: |
