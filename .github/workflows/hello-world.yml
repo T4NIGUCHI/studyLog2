@@ -28,6 +28,9 @@ jobs:
       - name: Verify dist directory
         run: ls -la dist  # distディレクトリの内容を確認
 
+      - name: Verify assets directory
+        run: ls -la dist/assets  # assetsディレクトリの内容を確認
+
       - name: Upload build artifacts
         uses: actions/upload-artifact@v2
         with:
@@ -65,6 +68,12 @@ jobs:
           name: dist  # アーティファクトの名前
           path: dist  # 保存するパス
 
+      - name: Verify dist directory before deploy
+        run: ls -la dist  # distディレクトリの内容を確認
+
+      - name: Verify assets directory before deploy
+        run: ls -la dist/assets  # assetsディレクトリの内容を確認
+
       - name: Deploy to Firebase Hosting
         run: |
           ./node_modules/.bin/firebase deploy --only hosting
@@ -78,11 +87,9 @@ jobs:
       - name: Validate deployment
         run: echo "Deployment completed successfully!"
 
-# 例外処理のためのヘルパー関数
       - name: Handle exceptions
         if: ${{ failure() }}
         run: echo "An error occurred during deployment."
 
-# 終了後のクリーンアップ
       - name: Final cleanup
         run: echo "Post job cleanup complete."
