@@ -1,5 +1,6 @@
 {
   "hosting": {
+    "site": "deploytest-cb257",
     "public": "dist",
     "ignore": [
       "firebase.json",

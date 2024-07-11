@@ -2,12 +2,7 @@
 import { initializeApp } from "firebase/app";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
-console.log(import.meta.env.VITE_FIREBASE_API_KEY);
-console.log(import.meta.env.VITE_FIREBASE_AUTH_DOMAIN);
-console.log(import.meta.env.VITE_FIREBASE_PROJECT_ID);
-console.log(import.meta.env.VITE_FIREBASE_STORAGE_BUCKET);
-console.log(import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID);
-console.log(import.meta.env.VITE_FIREBASE_APP_ID);
+
 // Your web app's Firebase configuration
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
