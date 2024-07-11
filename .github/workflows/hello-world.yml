@@ -80,6 +80,8 @@ jobs:
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}  # Firebaseトークンの設定
           FIREBASE_CLI_EXPERIMENTS: webframeworks  # Firebase CLIの実験的機能の有効化
+          VITE_SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          VITE_SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
 
       - name: Cleanup Firebase service account key
         run: rm ./firebase-key.json  # ジョブ終了時にFirebaseのサービスアカウントキーを削除
