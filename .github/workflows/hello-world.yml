@@ -32,7 +32,7 @@ jobs:
         with:
           node-version: "20"
           cache: "npm"
-        name: Verify dist directory
+      - name: Verify dist directory
         run: ls -la dist
       - name: Install firebase-tools
         run: npm install --save-dev firebase-tools
