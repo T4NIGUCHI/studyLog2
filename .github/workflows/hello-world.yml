@@ -21,11 +21,14 @@ jobs:
 
       - name: Install dependencies
         run: npm install
-        
+
       - name: Install supabase-js
         run: npm install @supabase/supabase-js
 
       - name: Run build
+        env:
+          VITE_SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          VITE_SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
         run: npm run build
 
       - name: Verify dist directory
@@ -80,8 +83,6 @@ jobs:
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
           FIREBASE_CLI_EXPERIMENTS: webframeworks
-          VITE_SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-          VITE_SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
 
       - name: Cleanup Firebase service account key
         run: rm ./firebase-key.json
