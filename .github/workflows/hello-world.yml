@@ -22,8 +22,8 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Install supabase-js
-        run: npm install @supabase/supabase-js
+      #- name: Install supabase-js
+      #  run: npm install @supabase/supabase-js
 
       - name: Run build
         env:
