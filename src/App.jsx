@@ -97,6 +97,7 @@ export const App = () => {
   return (
     <div className="App">
       <>
+      <h1 data-testid="title">学習記録アプリ</h1>
         <div>
           学習内容 <input value={inputTitle} onChange={handleInputTitle} />
           <p />
@@ -128,3 +129,5 @@ export const App = () => {
     </div>
   );
 };
+
+export default App;
