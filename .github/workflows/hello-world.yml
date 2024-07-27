@@ -8,7 +8,7 @@ on:
 
 jobs:
 
-test:
+  test:
     runs-on: ubuntu-latest
 
     steps:
@@ -18,7 +18,7 @@ test:
     - name: Set up Node.js
       uses: actions/setup-node@v3
       with:
-        node-version: '18'  # 使用しているNode.jsのバージョンに合わせて変更してください
+        node-version: '18'
 
     - name: Install dependencies
       run: npm install
@@ -31,12 +31,12 @@ test:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Setup Node.js
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
-          node-version: "18"
+          node-version: '18'
 
       - name: Install dependencies
         run: npm install
@@ -51,7 +51,7 @@ test:
         run: ls -la dist
 
       - name: Upload build artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: dist
           path: dist
@@ -62,13 +62,12 @@ test:
     needs: build
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
-      - name: Setup Node.js and cache
-        uses: actions/setup-node@v2
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
         with:
-          node-version: "18"
-          cache: "npm"
+          node-version: '18'
 
       - name: Install firebase-tools
         run: npm install --save-dev firebase-tools
@@ -82,7 +81,7 @@ test:
         run: ./node_modules/.bin/firebase use ${{ secrets.FIREBASE_PROJECT_ID }}
 
       - name: Download build artifacts
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: dist
           path: dist
