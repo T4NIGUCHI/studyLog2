@@ -125,7 +125,7 @@ export const App = () => {
           {records.map((record, index) => (
             <li key={index}>
               {record.title} {record.time}時間
-              <button onClick={() => handleDeleteRecord(record)}>削除</button>
+              <button data-testid={`delete-button-${index}`} onClick={() => handleDeleteRecord(record)}>削除</button>
             </li>
           ))}
         </ul>
