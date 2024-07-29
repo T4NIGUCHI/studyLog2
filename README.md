@@ -27,7 +27,7 @@ https://deploytest-cb257.web.app/
 1. Clone the repository.
 
     ```sh
-    git clone git clone https://github.com/T4NIGUCHI/studyLog2.git
+    git clone https://github.com/T4NIGUCHI/studyLog2.git
     cd study-record-app
     ```
 
